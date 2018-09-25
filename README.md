@@ -26,6 +26,7 @@ gcc -lasound main.c
 * http://scipy.github.io/devdocs/tutorial/fftpack.html#id10
 * https://www.dummies.com/programming/python/performing-a-fast-fourier-transform-fft-on-a-sound-file/
 * https://www.nti-audio.com/en/support/know-how/fast-fourier-transform-fft
+* http://codewiki.wikidot.com/c:system-calls:write
 
 ## License
 

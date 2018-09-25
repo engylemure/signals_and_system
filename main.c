@@ -1,51 +1,18 @@
 /*
- *  This extra small demo sends a random samples to your speakers.
- */
+
+This example reads from the default PCM device
+and writes to standard output for 5 seconds of data.
+
+*/
+
+#include "lib/play.h"
+#include "lib/record.h"
 #include <alsa/asoundlib.h>
-#include <stdio.h>
 
-static char *device = "default";			/* playback device */
-
-snd_output_t *output = NULL;
-unsigned char buffer[16*1024];				/* some random data */
-
-int main(void)
-{
-    int err;
-    unsigned int i;
-    snd_pcm_t *handle;
-    snd_pcm_sframes_t frames;
-
-    for (i = 0; i < sizeof(buffer); i++)
-        buffer[i] = random() & 0xff;
-
-    if ((err = snd_pcm_open(&handle, device, SND_PCM_STREAM_PLAYBACK, 0)) < 0) {
-        printf("Playback open error: %s\n", snd_strerror(err));
-        exit(EXIT_FAILURE);
+int main() {
+    if (write(1, "This will be output to standard out\n", 36) != 36) {
+        write(2, "There was an error writing to standard out\n", 44);
+        return -1;
     }
-    if ((err = snd_pcm_set_params(handle,
-                                  SND_PCM_FORMAT_U8,
-                                  SND_PCM_ACCESS_RW_INTERLEAVED,
-                                  1,
-                                  48000,
-                                  1,
-                                  500000)) < 0) {	/* 0.5sec */
-        printf("Playback open error: %s\n", snd_strerror(err));
-        exit(EXIT_FAILURE);
-    }
-
-    for (i = 0; i < 16; i++) {
-        frames = snd_pcm_writei(handle, buffer, sizeof(buffer));
-        if (frames < 0)
-            frames = snd_pcm_recover(handle, frames, 0);
-        if (frames < 0) {
-            printf("snd_pcm_writei failed: %s\n", snd_strerror(frames));
-            break;
-        }
-        if (frames > 0 && frames < (long)sizeof(buffer))
-            printf("Short write (expected %li, wrote %li)\n", (long)sizeof(buffer), frames);
-    }
-
-    snd_pcm_close(handle);
     return 0;
 }

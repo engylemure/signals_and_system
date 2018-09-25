@@ -6,7 +6,6 @@ alsa-lib-1.1.6.tar.bz2
 
 # CMake
 cmake-build-*/
-CMakeLists.txt
 
 # Prerequisites
 *.d
