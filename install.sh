@@ -4,5 +4,5 @@ rm -rf alsa-lib-1.1.6.tar.bz2
 mv alsa-lib-1.1.6 ./alsa
 cd alsa/
 ./configure && make
-make install
-./gitcompile
+sudo make install
+rm -rf alsa/
