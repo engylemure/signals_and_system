@@ -9,7 +9,9 @@ elseif(NOT WITHOUT_ALSA)
     find_package(ALSA)
 endif()
 
-add_executable(signals_and_system main.c lib/play.c lib/play.h lib/record.c lib/record.h)
+add_executable(signals_and_system main.c lib/play.c lib/play.h lib/record.c lib/record.h lib/util.c lib/util.h lib/complex_util.c lib/complex_util.h)
+
+target_link_libraries(signals_and_system -lm)
 
 if (ALSA_FOUND)
     include_directories(${ALSA_INCLUDE_DIRS})
