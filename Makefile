@@ -3,7 +3,7 @@ APPLICATION_NAME := application.out
 all:	build clean
 
 build:
-    @$(COMPILER) lib/*.c -c -g -lasound -lm
+	@$(COMPILER) lib/*.c -c -g -lasound -lm
 	@$(COMPILER) *.c -c -g -lasound -lm
 	@$(COMPILER) *.o -o $(APPLICATION_NAME) -g -lasound -lm
 

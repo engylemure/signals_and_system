@@ -8,8 +8,9 @@
 #define ALSA_PCM_NEW_HW_PARAMS_API
 
 #include <alsa/asoundlib.h>
+#include "util.h"
 
-int record_to_file(char* file_path);
+int record_to_file(char* file_path, int seconds, void (*apply_to_buffer)(void*), List* l);
 
 #endif //ALSA_PCM_NEW_HW_PARAMS_API
 #endif //SIGNALS_AND_SYSTEM_RECORD_H

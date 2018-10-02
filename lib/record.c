@@ -5,7 +5,8 @@
 #include "record.h"
 
 
-int record_to_file(char *file_path) {
+
+int record_to_file(char *file_path, int seconds, void (*apply_to_buffer)(void*), List* l) {
     long loops;
     int rc;
     int size;
@@ -14,8 +15,17 @@ int record_to_file(char *file_path) {
     unsigned int val;
     int dir;
     snd_pcm_uframes_t frames;
-    char *buffer;
-
+    char *buffer, *content;
+    int n_buffer = 0;
+    if(seconds == 0){
+        seconds = 5;
+    }
+    List *aux = l;
+    int filedesc = open(file_path, O_WRONLY);
+    printf("filedesc=%d\n",filedesc);
+    if (filedesc < 0) {
+        return -1;
+    }
     /* Open PCM device for recording (capture). */
     rc = snd_pcm_open(&handle, "default",
                       SND_PCM_STREAM_CAPTURE, 0);
@@ -77,6 +87,7 @@ int record_to_file(char *file_path) {
 
     while (loops > 0) {
         loops--;
+        n_buffer++;
         rc = snd_pcm_readi(handle, buffer, frames);
         if (rc == -EPIPE) {
             /* EPIPE means overrun */
@@ -89,7 +100,13 @@ int record_to_file(char *file_path) {
         } else if (rc != (int)frames) {
             fprintf(stderr, "short read, read %d frames\n", rc);
         }
-        rc = write(1, buffer, size);
+        apply_to_buffer(buffer);
+        content = malloc(sizeof(buffer));
+        memcpy(content, buffer, sizeof(buffer));
+        aux->content = content;
+        append_list(aux, new_list());
+        aux = aux->next;
+        rc = write(filedesc,buffer,size);
         if (rc != size)
             fprintf(stderr,
                     "short write: wrote %d bytes\n", rc);
@@ -99,5 +116,5 @@ int record_to_file(char *file_path) {
     snd_pcm_close(handle);
     free(buffer);
 
-    return 0;
+    return n_buffer;
 }

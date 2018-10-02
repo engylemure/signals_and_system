@@ -1,7 +1,3 @@
-//
-// Created by jordao on 25/09/18.
-//
-
 #ifndef SIGNALS_AND_SYSTEM_PLAY_H
 #define SIGNALS_AND_SYSTEM_PLAY_H
 #ifndef ALSA_PCM_NEW_HW_PARAMS_API
